@@ -41,6 +41,7 @@ Based on tutorial by [Peter Quiel|http://qr-thoughts.de/2012/01/requestfactory-w
 
   def developers = [[name: 'Alexey Zhokhov', email: 'donbeave@gmail.com']]
 
+  def issueManagement = [system: 'Github', url: 'https://github.com/donbeave/grails-gwt-requestfactory/issues']
   def scm = [url: 'https://github.com/donbeave/grails-gwt-requestfactory/']
 
   def loadAfter = ['gwt']
