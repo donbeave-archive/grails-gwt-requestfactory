@@ -4,7 +4,7 @@ grails.project.test.reports.dir = 'target/test-reports'
 
 grails.project.dependency.resolution = {
   dependencyManager.ivySettings.defaultCacheIvyPattern =
-    '[organisation]/[module](/[branch])/ivy-[revision](-[classifier]).xml'
+      '[organisation]/[module](/[branch])/ivy-[revision](-[classifier]).xml'
 
   inherits('global') {
   }
@@ -25,9 +25,9 @@ grails.project.dependency.resolution = {
   }
 
   plugins {
-    compile ':gwt:0.9.1'
+    compile ':gwt:0.9.2'
 
-    build(":release:2.2.1",
+    build(":release:3.0.1",
         ":rest-client-builder:1.0.3") {
       export = false
     }
