@@ -14,7 +14,7 @@ grails.project.dependency.resolution = {
         grailsHome()
         grailsCentral()
         mavenCentral()
-        grailsRepo "http://grails.org/plugins"
+        grailsRepo 'http://grails.org/plugins'
     }
     dependencies {
         compile 'com.google.web.bindery:requestfactory-apt:2.4.0'
@@ -27,7 +27,7 @@ grails.project.dependency.resolution = {
     plugins {
         compile ':gwt:0.9.2'
 
-        build ':tomcat:7.0.50.1', ':release:3.0.1', ':rest-client-builder:1.0.3', {
+        build ':tomcat:7.0.52.1', ':release:3.0.1', ':rest-client-builder:1.0.3', {
             export = false
         }
     }
