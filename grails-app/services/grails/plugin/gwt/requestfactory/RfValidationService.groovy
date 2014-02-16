@@ -27,47 +27,50 @@ import javax.validation.ConstraintViolation
 import javax.validation.Path
 import java.lang.annotation.ElementType
 
+/**
+ * @author <a href='mailto:donbeave@gmail.com'>Alexey Zhokhov</a>
+ */
 class RfValidationService extends ServiceLayerDecorator {
 
-  static transactional = false
+    static transactional = false
 
-  def messageSource
+    def messageSource
 
-  @Override
-  public <T> Set<ConstraintViolation<T>> validate(T domainObject) {
-    try {
-      if (!domainObject.validate()) {
-        List<ConstraintViolation<T>> violations = []
-        Errors errors = domainObject.errors
-        Locale locale = resolveLocale()
-        for (FieldError fieldError : errors.fieldErrors) {
-          ConstraintViolation<T> violation = convertFieldError(fieldError, locale, domainObject)
-          violations << violation
+    @Override
+    public <T> Set<ConstraintViolation<T>> validate(T domainObject) {
+        try {
+            if (!domainObject.validate()) {
+                List<ConstraintViolation<T>> violations = []
+                Errors errors = domainObject.errors
+                Locale locale = resolveLocale()
+                for (FieldError fieldError : errors.fieldErrors) {
+                    ConstraintViolation<T> violation = convertFieldError(fieldError, locale, domainObject)
+                    violations << violation
+                }
+                return violations
+            }
+        } catch (Exception e) {
+            // Nothing to do.. validate method does not exists. Thats ok.
         }
-        return violations
-      }
-    } catch (Exception e) {
-      // Nothing to do.. validate method does not exists. Thats ok.
+        return super.validate(domainObject)
     }
-    return super.validate(domainObject)
-  }
 
-  private <T> ConstraintViolation<T> convertFieldError(FieldError fieldError, Locale locale, T domainObject) {
-    String messageTemplate = fieldError.codes?.length > 0 ? fieldError.codes[0] : fieldError.code
-    String interpolatedMessage = messageSource.getMessage(fieldError, locale)
-    T rootBean = domainObject
-    Path path = PathImpl.createPathFromString(fieldError.field)
-    Object invalidValue = fieldError.rejectedValue
-    Class<T> rootBeanClass = domainObject.class
-    ConstraintViolation<T> violation = new ConstraintViolationImpl<T>(messageTemplate, interpolatedMessage,
-        rootBeanClass, rootBean, domainObject,
-        invalidValue, path, null, ElementType.FIELD)
-    return violation
-  }
+    private <T> ConstraintViolation<T> convertFieldError(FieldError fieldError, Locale locale, T domainObject) {
+        String messageTemplate = fieldError.codes?.length > 0 ? fieldError.codes[0] : fieldError.code
+        String interpolatedMessage = messageSource.getMessage(fieldError, locale)
+        T rootBean = domainObject
+        Path path = PathImpl.createPathFromString(fieldError.field)
+        Object invalidValue = fieldError.rejectedValue
+        Class<T> rootBeanClass = domainObject.class
+        ConstraintViolation<T> violation = new ConstraintViolationImpl<T>(messageTemplate, interpolatedMessage,
+                rootBeanClass, rootBean, domainObject,
+                invalidValue, path, null, ElementType.FIELD)
+        return violation
+    }
 
-  private Locale resolveLocale() {
-    return (Locale) RequestContextHolder.requestAttributes.getAttribute(GwtRequestFactoryController.GWT_LANGUAGE,
-        RequestAttributes.SCOPE_REQUEST)
-  }
+    private Locale resolveLocale() {
+        return (Locale) RequestContextHolder.requestAttributes.getAttribute(GwtRequestFactoryController.GWT_LANGUAGE,
+                RequestAttributes.SCOPE_REQUEST)
+    }
 
 }

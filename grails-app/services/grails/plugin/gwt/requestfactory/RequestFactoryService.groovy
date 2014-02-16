@@ -15,28 +15,17 @@
  */
 package grails.plugin.gwt.requestfactory
 
-import com.google.web.bindery.requestfactory.server.DefaultExceptionHandler
-import com.google.web.bindery.requestfactory.server.ServiceLayer
-import com.google.web.bindery.requestfactory.server.SimpleRequestProcessor
-
-import javax.annotation.PostConstruct
-
+/**
+ * @author <a href='mailto:donbeave@gmail.com'>Alexey Zhokhov</a>
+ */
 class RequestFactoryService {
 
-  RfValidationService rfValidationService
+    def gwtRequestProcessor
 
-  private SimpleRequestProcessor processor
+    static transactional = false
 
-  static transactional = false
-
-  public String process(String jsonRequestString) {
-    return processor.process(jsonRequestString)
-  }
-
-  @PostConstruct
-  public void initProcessor() {
-    processor = new SimpleRequestProcessor(ServiceLayer.create(rfValidationService))
-    processor.exceptionHandler = new DefaultExceptionHandler()
-  }
+    public String process(String jsonRequestString) {
+        return gwtRequestProcessor.process(jsonRequestString)
+    }
 
 }

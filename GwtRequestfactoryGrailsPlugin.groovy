@@ -1,3 +1,7 @@
+import com.google.web.bindery.requestfactory.server.DefaultExceptionHandler
+import com.google.web.bindery.requestfactory.server.ServiceLayer
+import com.google.web.bindery.requestfactory.server.SimpleRequestProcessor
+
 /*
  * Copyright (c) 2012 the original author or authors.
  *
@@ -19,31 +23,42 @@
  */
 class GwtRequestfactoryGrailsPlugin {
 
-  def version = '0.1'
-  def grailsVersion = '2.0 > *'
-  def dependsOn = [gwt: '0.9.1 > *']
-  def pluginExcludes = [
-      'grails-app/views/*',
-      'web-app/*',
-  ]
+    def version = '0.1'
+    def grailsVersion = '2.0 > *'
+    def pluginExcludes = [
+            'grails-app/views/*',
+            'web-app/*',
+    ]
 
-  def title = 'GWT RequestFactory Plugin'
-  def author = 'Alexey Zhokhov'
-  def authorEmail = 'donbeave@gmail.com'
-  def description = '''\
+    def title = 'GWT RequestFactory Plugin'
+    def author = 'Alexey Zhokhov'
+    def authorEmail = 'donbeave@gmail.com'
+    def description = '''\
 Controller, services and some classes needed to use [RequestFactory|http://www.gwtproject.org/doc/latest/DevGuideRequestFactory.html] with Grails app.
 Based on tutorial by [Peter Quiel|http://qr-thoughts.de/2012/01/requestfactory-with-gwt-2-4-and-grails-2-0-part-i/].
 '''
 
-  def documentation = 'http://grails.org/plugin/gwt-requestfactory'
+    def documentation = 'http://grails.org/plugin/gwt-requestfactory'
 
-  def license = 'APACHE'
+    def license = 'APACHE'
 
-  def developers = [[name: 'Alexey Zhokhov', email: 'donbeave@gmail.com']]
+    def developers = [[name: 'Alexey Zhokhov', email: 'donbeave@gmail.com']]
 
-  def issueManagement = [system: 'Github', url: 'https://github.com/donbeave/grails-gwt-requestfactory/issues']
-  def scm = [url: 'https://github.com/donbeave/grails-gwt-requestfactory/']
+    def issueManagement = [system: 'Github', url: 'https://github.com/donbeave/grails-gwt-requestfactory/issues']
+    def scm = [url: 'https://github.com/donbeave/grails-gwt-requestfactory/']
 
-  def loadAfter = ['gwt']
+    def loadAfter = ['gwt']
+
+    def doWithSpring = {
+        gwtServiceLayer(ServiceLayer, ref('rfValidationService')) { bean ->
+            bean.factoryMethod = 'create'
+        }
+        gwtExceptionHandler(DefaultExceptionHandler) {
+
+        }
+        gwtRequestProcessor(SimpleRequestProcessor, ref('gwtServiceLayer')) {
+            exceptionHandler = ref('gwtExceptionHandler')
+        }
+    }
 
 }

@@ -13,10 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * @author <a href='mailto:donbeave@gmail.com'>Alexey Zhokhov</a>
+ */
 class GwtRequestFactoryUrlMappings {
 
-  static mappings = {
-    '/gwtRequest'(controller: 'gwtRequestFactory', action: 'index')
-  }
+    static mappings = {
+        '/gwtRequest'(controller: 'gwtRequestFactory', action: 'index')
+    }
 
 }

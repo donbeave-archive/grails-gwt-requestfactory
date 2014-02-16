@@ -19,11 +19,14 @@ import com.google.web.bindery.requestfactory.shared.ServiceLocator
 import org.codehaus.groovy.grails.web.context.ServletContextHolder
 import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
 
+/**
+ * @author <a href='mailto:donbeave@gmail.com'>Alexey Zhokhov</a>
+ */
 class GrailsServiceLocator implements ServiceLocator {
 
-  public Object getInstance(Class clazz) {
-    def context = ServletContextHolder.servletContext.getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT)
-    return context.getBean(clazz);
-  }
+    public Object getInstance(Class clazz) {
+        def context = ServletContextHolder.servletContext.getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT)
+        return context.getBean(clazz);
+    }
 
 }
