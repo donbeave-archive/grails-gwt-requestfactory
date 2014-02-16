@@ -1,7 +1,3 @@
-import com.google.web.bindery.requestfactory.server.DefaultExceptionHandler
-import com.google.web.bindery.requestfactory.server.ServiceLayer
-import com.google.web.bindery.requestfactory.server.SimpleRequestProcessor
-
 /*
  * Copyright (c) 2012 the original author or authors.
  *
@@ -17,13 +13,16 @@ import com.google.web.bindery.requestfactory.server.SimpleRequestProcessor
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.google.web.bindery.requestfactory.server.DefaultExceptionHandler
+import com.google.web.bindery.requestfactory.server.ServiceLayer
+import com.google.web.bindery.requestfactory.server.SimpleRequestProcessor
 
 /**
  * @author <a href='mailto:donbeave@gmail.com'>Alexey Zhokhov</a>
  */
 class GwtRequestfactoryGrailsPlugin {
 
-    def version = '0.1'
+    def version = '0.1.1'
     def grailsVersion = '2.0 > *'
     def pluginExcludes = [
             'grails-app/views/*',
