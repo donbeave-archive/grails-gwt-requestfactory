@@ -27,12 +27,13 @@ import javax.servlet.http.HttpServletResponse
  */
 class GwtRequestFactoryController {
 
+    public static final String GWT_LANGUAGE = 'X-GWT-Language'
+
     private static final String JSON_CHARSET = 'UTF-8'
     private static final String JSON_CONTENT_TYPE = 'application/json'
 
     RequestFactoryService requestFactoryService
-
-    public static final String GWT_LANGUAGE = 'X-GWT-Language'
+    def grailsApplication
 
     def index = {
         String gwtLanguage = request.getHeader(GWT_LANGUAGE)
@@ -41,7 +42,8 @@ class GwtRequestFactoryController {
             RequestContextUtils.getLocaleResolver(request).setLocale(request, response, gwtLocale)
             RequestContextHolder.requestAttributes.setAttribute(GWT_LANGUAGE, gwtLocale, RequestAttributes.SCOPE_REQUEST)
         }
-        def jsonRequestString = RPCServletUtils.readContent(request, JSON_CONTENT_TYPE, JSON_CHARSET)
+        def jsonRequestString = RPCServletUtils.readContent(request,
+                request.contentType != null ? JSON_CONTENT_TYPE : null, JSON_CHARSET)
         if (log.isDebugEnabled()) {
             log.debug(">>>$jsonRequestString")
         }
@@ -50,6 +52,12 @@ class GwtRequestFactoryController {
             if (log.isDebugEnabled()) {
                 log.debug("<<<$payload")
             }
+
+            if (grailsApplication.config.gwt?.requestfactory?.acao) {
+                response.setHeader('Access-Control-Allow-Origin',
+                        grailsApplication.config.gwt.requestfactory.acao.toString())
+            }
+
             render(text: payload, contentType: JSON_CONTENT_TYPE, encoding: JSON_CHARSET)
         } catch (RuntimeException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
