@@ -48,17 +48,21 @@ class GwtRequestFactoryController {
             log.debug(">>>$jsonRequestString")
         }
         try {
-            def payload = requestFactoryService.process(jsonRequestString)
-            if (log.isDebugEnabled()) {
-                log.debug("<<<$payload")
-            }
-
             if (grailsApplication.config.gwt?.requestfactory?.acao) {
                 response.setHeader('Access-Control-Allow-Origin',
                         grailsApplication.config.gwt.requestfactory.acao.toString())
             }
 
-            render(text: payload, contentType: JSON_CONTENT_TYPE, encoding: JSON_CHARSET)
+            if (jsonRequestString) {
+                def payload = requestFactoryService.process(jsonRequestString)
+                if (log.isDebugEnabled()) {
+                    log.debug("<<<$payload")
+                }
+
+                render(text: payload, contentType: JSON_CONTENT_TYPE, encoding: JSON_CHARSET)
+            } else {
+                render(text: '', contentType: JSON_CONTENT_TYPE, encoding: JSON_CHARSET)
+            }
         } catch (RuntimeException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
             log.error('Unexpected error', e)
