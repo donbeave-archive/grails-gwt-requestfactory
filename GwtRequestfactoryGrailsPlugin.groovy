@@ -16,6 +16,7 @@
 import com.google.web.bindery.requestfactory.server.DefaultExceptionHandler
 import com.google.web.bindery.requestfactory.server.ServiceLayer
 import com.google.web.bindery.requestfactory.server.SimpleRequestProcessor
+import grails.util.Environment
 
 /**
  * @author <a href='mailto:donbeave@gmail.com'>Alexey Zhokhov</a>
@@ -49,6 +50,8 @@ Based on tutorial by [Peter Quiel|http://qr-thoughts.de/2012/01/requestfactory-w
     def loadAfter = ['gwt']
 
     def doWithSpring = {
+        loadConfig(application.config)
+
         gwtServiceLayer(ServiceLayer, ref('rfValidationService')) { bean ->
             bean.factoryMethod = 'create'
         }
@@ -58,6 +61,34 @@ Based on tutorial by [Peter Quiel|http://qr-thoughts.de/2012/01/requestfactory-w
         gwtRequestProcessor(SimpleRequestProcessor, ref('gwtServiceLayer')) {
             exceptionHandler = ref('gwtExceptionHandler')
         }
+    }
+
+    private ConfigObject loadConfig(ConfigObject config) {
+        def classLoader = new GroovyClassLoader(getClass().classLoader)
+        String environment = Environment.current.name
+
+        // Note here the order of objects when calling merge - merge OVERWRITES values in the target object
+        // Load default config as a basis
+        def newConfig = new ConfigSlurper(environment).parse(
+                classLoader.loadClass('DefaultGwtRequestFactoryConfig')
+        )
+
+        // Overwrite defaults with what Config.groovy has supplied, perhaps from external files
+        newConfig.merge(config)
+
+        // Overwrite with contents of GwtRequestFactoryConfig
+        try {
+            newConfig.merge(new ConfigSlurper(environment).parse(
+                    classLoader.loadClass('GwtRequestFactoryConfig'))
+            )
+        } catch (Exception ignored) {
+            // ignore, just use the defaults
+        }
+
+        // Now merge our correctly merged DefaultGwtRequestFactoryConfig and GwtRequestFactoryConfig into the main config
+        config.merge(newConfig)
+
+        return config.sitemap
     }
 
 }
