@@ -48,9 +48,20 @@ class GwtRequestFactoryController {
             log.debug(">>>$jsonRequestString")
         }
         try {
-            if (grailsApplication.config.gwt?.requestfactory?.acao) {
-                response.setHeader('Access-Control-Allow-Origin',
-                        grailsApplication.config.gwt.requestfactory.acao.toString())
+            def accessConfig = grailsApplication.config.gwt?.requestfactory?.accessControl
+
+            if (accessConfig) {
+                if (accessConfig.allowOrigin) {
+                    response.setHeader('Access-Control-Allow-Origin', accessConfig.allowOrigin.toString())
+                }
+
+                if (accessConfig.allowMethods) {
+                    response.addHeader('Access-Control-Allow-Methods', accessConfig.allowMethods.toString());
+                }
+
+                if (accessConfig.allowHeaders) {
+                    response.addHeader('Access-Control-Allow-Headers', accessConfig.allowHeaders.toString())
+                }
             }
 
             if (jsonRequestString) {
