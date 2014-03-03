@@ -19,7 +19,7 @@ grails.project.dependency.resolution = {
     dependencies {
         compile 'com.google.web.bindery:requestfactory-apt:2.4.0'
 
-        compile 'org.hibernate:hibernate-validator:4.2.0.Final', {
+        runtime 'org.hibernate:hibernate-validator:4.2.0.Final', {
             excludes 'slf4j-log4j12', 'slf4j-api'
         }
     }
