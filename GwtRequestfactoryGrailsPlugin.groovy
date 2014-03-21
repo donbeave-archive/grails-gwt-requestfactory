@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import com.google.web.bindery.requestfactory.server.DefaultExceptionHandler
+import com.google.web.bindery.requestfactory.server.GrailsServiceLayer
 import com.google.web.bindery.requestfactory.server.ServiceLayer
 import com.google.web.bindery.requestfactory.server.SimpleRequestProcessor
 import grails.util.Environment
@@ -23,11 +24,11 @@ import grails.util.Environment
  */
 class GwtRequestfactoryGrailsPlugin {
 
-    def version = '0.1.3'
+    def version = '0.1.4'
     def grailsVersion = '2.0 > *'
     def pluginExcludes = [
             'grails-app/views/*',
-            'web-app/*',
+            'web-app/*'
     ]
 
     def title = 'GWT RequestFactory Plugin'
@@ -52,6 +53,9 @@ Based on tutorial by [Peter Quiel|http://qr-thoughts.de/2012/01/requestfactory-w
     def doWithSpring = {
         loadConfig(application.config)
 
+        rfValidationService(GrailsServiceLayer) {
+            messageSource = ref('messageSource')
+        }
         gwtServiceLayer(ServiceLayer, ref('rfValidationService')) { bean ->
             bean.factoryMethod = 'create'
         }

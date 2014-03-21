@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package grails.plugin.gwt.requestfactory
+package com.google.web.bindery.requestfactory.server
 
-import com.google.web.bindery.requestfactory.server.ServiceLayerDecorator
+import grails.plugin.gwt.requestfactory.GwtRequestFactoryController
 import org.hibernate.validator.engine.ConstraintViolationImpl
 import org.hibernate.validator.engine.PathImpl
 import org.springframework.validation.Errors
@@ -30,9 +30,7 @@ import java.lang.annotation.ElementType
 /**
  * @author <a href='mailto:donbeave@gmail.com'>Alexey Zhokhov</a>
  */
-class RfValidationService extends ServiceLayerDecorator {
-
-    static transactional = false
+class GrailsServiceLayer extends ServiceLayerDecorator {
 
     def messageSource
 
