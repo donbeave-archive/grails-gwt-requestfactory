@@ -146,7 +146,7 @@ class DefaultGrailsRequestFactoryProxyGenerator {
             writer.write eol
         }
 
-        writer.write "@ProxyForName(value = \"${dc.fullName}\",${eol}${indent}${indent}locator = \"grails.plugin.gwt.requestfactory.GrailsProxyLocator<${dc.fullName}>\")${eol}"
+        writer.write "@ProxyForName(value = \"${dc.fullName}\",${eol}${indent}${indent}locator = \"grails.plugin.gwt.requestfactory.GrailsProxyLocator\")${eol}"
         writer.write "@SkipInterfaceValidation${eol}"
 
         // Next, the class declaration.
