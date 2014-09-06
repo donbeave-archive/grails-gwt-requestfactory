@@ -22,26 +22,16 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        build ':extended-dependency-manager:0.5.5'
-        build ':tomcat:7.0.53', ':release:3.0.1', ':rest-client-builder:2.0.1', {
+        build ':tomcat:7.0.54', ':release:3.0.1', ':rest-client-builder:2.0.3', {
             export = false
         }
 
-        compile ':gwt:1.0', {
+        compile ':gwt:2.0-SNAPSHOT', {
             transitive = false
         }
-
-        runtime ':resources:1.2.8'
     }
 }
 
 gwt {
     version = '2.6.1'
-    dependencies = [
-            'org.json:json:20140107'
-    ]
-}
-
-if (System.getProperty('java.version').startsWith('1.8')) {
-    gwt.javac.cmd = 'javac'
 }

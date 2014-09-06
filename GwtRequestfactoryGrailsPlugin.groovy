@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import com.google.web.bindery.requestfactory.server.DefaultExceptionHandler
 import com.google.web.bindery.requestfactory.server.GrailsServiceLayer
 import com.google.web.bindery.requestfactory.server.ServiceLayer
 import com.google.web.bindery.requestfactory.server.SimpleRequestProcessor
+import grails.plugin.gwt.requestfactory.DefaultGrailsRequestFactoryProxyGenerator
 import grails.util.Environment
 
 /**
@@ -24,12 +26,8 @@ import grails.util.Environment
  */
 class GwtRequestfactoryGrailsPlugin {
 
-    def version = '0.1.5'
+    def version = '0.2-SNAPSHOT'
     def grailsVersion = '2.0 > *'
-    def pluginExcludes = [
-            'grails-app/views/*',
-            'web-app/*'
-    ]
 
     def title = 'GWT RequestFactory Plugin'
     def author = 'Alexey Zhokhov'
@@ -51,7 +49,7 @@ Based on tutorial by [Peter Quiel|http://qr-thoughts.de/2012/01/requestfactory-w
     def loadAfter = ['gwt']
 
     def doWithSpring = {
-        loadConfig(application.config)
+        def config = loadConfig(application.config)
 
         rfValidationService(GrailsServiceLayer) {
             messageSource = ref('messageSource')
@@ -64,6 +62,13 @@ Based on tutorial by [Peter Quiel|http://qr-thoughts.de/2012/01/requestfactory-w
         }
         gwtRequestProcessor(SimpleRequestProcessor, ref('gwtServiceLayer')) {
             exceptionHandler = ref('gwtExceptionHandler')
+        }
+
+        // Create the proxy generator bean.
+        if (config.generate.indent) {
+            gwtProxyGenerator(DefaultGrailsRequestFactoryProxyGenerator, true, config.generate.indent)
+        } else {
+            gwtProxyGenerator(DefaultGrailsRequestFactoryProxyGenerator)
         }
     }
 
@@ -92,7 +97,7 @@ Based on tutorial by [Peter Quiel|http://qr-thoughts.de/2012/01/requestfactory-w
         // Now merge our correctly merged DefaultGwtRequestFactoryConfig and GwtRequestFactoryConfig into the main config
         config.merge(newConfig)
 
-        return config.sitemap
+        config.grails.plugin.gwt.requestfactory
     }
 
 }
