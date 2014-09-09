@@ -16,6 +16,7 @@
 package grails.plugin.gwt.requestfactory
 
 import com.google.gwt.user.server.rpc.RPCServletUtils
+import com.google.web.bindery.requestfactory.server.GrailsServiceLayer
 import org.springframework.web.context.request.RequestAttributes
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.servlet.support.RequestContextUtils
@@ -27,8 +28,6 @@ import javax.servlet.http.HttpServletResponse
  */
 class GwtRequestFactoryController {
 
-    public static final String GWT_LANGUAGE = 'X-GWT-Language'
-
     private static final String JSON_CHARSET = 'UTF-8'
     private static final String JSON_CONTENT_TYPE = 'application/json'
 
@@ -36,11 +35,12 @@ class GwtRequestFactoryController {
     def grailsApplication
 
     def index = {
-        String gwtLanguage = request.getHeader(GWT_LANGUAGE)
+        String gwtLanguage = request.getHeader(GrailsServiceLayer.GWT_LANGUAGE)
         if (gwtLanguage) {
             Locale gwtLocale = new Locale(gwtLanguage)
             RequestContextUtils.getLocaleResolver(request).setLocale(request, response, gwtLocale)
-            RequestContextHolder.requestAttributes.setAttribute(GWT_LANGUAGE, gwtLocale, RequestAttributes.SCOPE_REQUEST)
+            RequestContextHolder.requestAttributes.setAttribute(GrailsServiceLayer.GWT_LANGUAGE, gwtLocale,
+                    RequestAttributes.SCOPE_REQUEST)
         }
         def jsonRequestString = RPCServletUtils.readContent(request,
                 request.contentType != null ? JSON_CONTENT_TYPE : null, JSON_CHARSET)

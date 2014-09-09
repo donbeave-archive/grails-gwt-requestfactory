@@ -15,7 +15,6 @@
  */
 package com.google.web.bindery.requestfactory.server
 
-import grails.plugin.gwt.requestfactory.GwtRequestFactoryController
 import org.hibernate.validator.engine.ConstraintViolationImpl
 import org.hibernate.validator.engine.PathImpl
 import org.springframework.validation.Errors
@@ -31,6 +30,8 @@ import java.lang.annotation.ElementType
  * @author <a href='mailto:donbeave@gmail.com'>Alexey Zhokhov</a>
  */
 class GrailsServiceLayer extends ServiceLayerDecorator {
+
+    public static final String GWT_LANGUAGE = 'X-GWT-Language'
 
     def messageSource
 
@@ -66,9 +67,8 @@ class GrailsServiceLayer extends ServiceLayerDecorator {
         return violation
     }
 
-    private Locale resolveLocale() {
-        return (Locale) RequestContextHolder.requestAttributes.getAttribute(GwtRequestFactoryController.GWT_LANGUAGE,
-                RequestAttributes.SCOPE_REQUEST)
+    static Locale resolveLocale() {
+        RequestContextHolder.requestAttributes.getAttribute(GWT_LANGUAGE, RequestAttributes.SCOPE_REQUEST)
     }
 
 }
