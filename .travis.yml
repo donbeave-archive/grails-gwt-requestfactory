@@ -1,15 +1,8 @@
-language: java
-
+language: groovy
 jdk:
-    - openjdk7
-    - oraclejdk7
-    - oraclejdk8
-
-branches:
-  only:
-    - master
-
+- openjdk7
+- oraclejdk7
+- oraclejdk8
 before_script:
-    - chmod +x travis-build.sh
-
+- rm -rf target
 script: ./travis-build.sh
