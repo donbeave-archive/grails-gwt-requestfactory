@@ -10,6 +10,7 @@ grails.project.dependency.resolution = {
     repositories {
         grailsPlugins()
         grailsHome()
+        mavenLocal()
         grailsCentral()
         mavenCentral()
         mavenRepo 'https://raw.github.com/donbeave/mavenrepo/master/'
@@ -23,7 +24,9 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        build ':tomcat:7.0.55', ':release:3.0.1', ':rest-client-builder:2.0.3', {
+        build(':tomcat:7.0.55',
+                ':release:3.0.1',
+                ':rest-client-builder:2.0.3') {
             export = false
         }
 
