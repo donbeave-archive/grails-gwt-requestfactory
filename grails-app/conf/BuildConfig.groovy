@@ -12,6 +12,7 @@ grails.project.dependency.resolution = {
         grailsHome()
         grailsCentral()
         mavenCentral()
+        mavenRepo 'https://raw.github.com/donbeave/mavenrepo/master/'
     }
     dependencies {
         compile 'com.google.web.bindery:requestfactory-apt:2.6.1'
@@ -22,7 +23,7 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        build ':tomcat:7.0.54', ':release:3.0.1', ':rest-client-builder:2.0.3', {
+        build ':tomcat:7.0.55', ':release:3.0.1', ':rest-client-builder:2.0.3', {
             export = false
         }
 
