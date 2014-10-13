@@ -1,4 +1,4 @@
-grails-gwt-requestfactory
+grails-gwt-requestfactory [![Build Status](https://travis-ci.org/donbeave/grails-gwt-requestfactory.svg?branch=master)](https://travis-ci.org/donbeave/grails-gwt-requestfactory)
 =========================
 
 RequestFactory support for Grails GWT plugin
