@@ -28,6 +28,7 @@ import org.codehaus.groovy.grails.commons.GrailsDomainClass
  * @author <a href='mailto:donbeave@gmail.com'>Alexey Zhokhov</a>
  */
 class DefaultGrailsRequestFactoryProxyGenerator {
+
     private final String eol
     private final String indent
 
@@ -215,4 +216,5 @@ class DefaultGrailsRequestFactoryProxyGenerator {
             return targetPkg.replaceFirst('.server', '.shared')
         }
     }
+
 }
