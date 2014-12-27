@@ -15,8 +15,8 @@
  */
 package com.google.web.bindery.requestfactory.server
 
-import org.hibernate.validator.engine.ConstraintViolationImpl
-import org.hibernate.validator.engine.PathImpl
+import org.hibernate.validator.internal.engine.ConstraintViolationImpl
+import org.hibernate.validator.internal.engine.path.PathImpl
 import org.springframework.validation.Errors
 import org.springframework.validation.FieldError
 import org.springframework.web.context.request.RequestAttributes

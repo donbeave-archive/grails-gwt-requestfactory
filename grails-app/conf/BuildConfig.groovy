@@ -18,15 +18,13 @@ grails.project.dependency.resolution = {
     dependencies {
         compile 'com.google.web.bindery:requestfactory-apt:2.6.1'
 
-        runtime 'org.hibernate:hibernate-validator:4.2.0.Final', {
-            excludes 'slf4j-log4j12', 'slf4j-api'
+        runtime 'org.hibernate:hibernate-validator:5.1.0.Final', {
+            excludes 'testng', 'log4j', 'easymock', 'groovy-jsr223', 'fest-assert'
         }
     }
 
     plugins {
-        build(':tomcat:7.0.55',
-                ':release:3.0.1',
-                ':rest-client-builder:2.0.3') {
+        build(':tomcat:7.0.55', ':release:3.0.1', ':rest-client-builder:2.0.3') {
             export = false
         }
 
