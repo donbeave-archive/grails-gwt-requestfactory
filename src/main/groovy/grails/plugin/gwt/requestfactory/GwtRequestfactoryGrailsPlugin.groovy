@@ -82,12 +82,12 @@ Based on tutorial by [Peter Quiel|http://qr-thoughts.de/2012/01/requestfactory-w
 
         // Note here the order of objects when calling merge - merge OVERWRITES values in the target object
         // Load default config as a basis
-        def newConfig = new ConfigSlurper(environment).parse(
+        ConfigObject newConfig = new ConfigSlurper(environment).parse(
                 classLoader.loadClass('DefaultGwtRequestFactoryConfig')
         )
 
         // Overwrite defaults with what Config.groovy has supplied, perhaps from external files
-        newConfig.merge(conf)
+        newConfig.putAll(conf)
 
         // Overwrite with contents of GwtRequestFactoryConfig
         try {
