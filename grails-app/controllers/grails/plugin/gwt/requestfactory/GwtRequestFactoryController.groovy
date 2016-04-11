@@ -32,7 +32,6 @@ class GwtRequestFactoryController {
     private static final String JSON_CONTENT_TYPE = 'application/json'
 
     RequestFactoryService requestFactoryService
-    def grailsApplication
 
     def index = {
         String gwtLanguage = request.getHeader(GrailsServiceLayer.GWT_LANGUAGE)

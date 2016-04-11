@@ -1,4 +1,4 @@
-package gwt.requestfactory
+package grails.plugin.gwt.requestfactory
 
 import grails.boot.GrailsApp
 import grails.boot.config.GrailsAutoConfiguration

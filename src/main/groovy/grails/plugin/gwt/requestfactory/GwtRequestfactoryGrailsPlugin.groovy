@@ -13,21 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package grails.plugin.gwt.requestfactory
 
 import com.google.web.bindery.requestfactory.server.DefaultExceptionHandler
 import com.google.web.bindery.requestfactory.server.GrailsServiceLayer
 import com.google.web.bindery.requestfactory.server.ServiceLayer
 import com.google.web.bindery.requestfactory.server.SimpleRequestProcessor
+import grails.config.Config
 import grails.plugin.gwt.requestfactory.DefaultGrailsRequestFactoryProxyGenerator
+import grails.plugins.Plugin
 import grails.util.Environment
 
 /**
  * @author <a href='mailto:donbeave@gmail.com'>Alexey Zhokhov</a>
  */
-class GwtRequestfactoryGrailsPlugin {
+class GwtRequestfactoryGrailsPlugin extends Plugin {
 
-    def version = '0.2-SNAPSHOT'
-    def grailsVersion = '2.0 > *'
+    def grailsVersion = '3.0.0 > *'
 
     def title = 'GWT RequestFactory Plugin'
     def author = 'Alexey Zhokhov'
@@ -36,6 +38,8 @@ class GwtRequestfactoryGrailsPlugin {
 Controller, services and some classes needed to use [RequestFactory|http://www.gwtproject.org/doc/latest/DevGuideRequestFactory.html] with Grails app.
 Based on tutorial by [Peter Quiel|http://qr-thoughts.de/2012/01/requestfactory-with-gwt-2-4-and-grails-2-0-part-i/].
 '''
+
+    def profiles = ['web']
 
     def documentation = 'http://grails.org/plugin/gwt-requestfactory'
 
@@ -46,33 +50,33 @@ Based on tutorial by [Peter Quiel|http://qr-thoughts.de/2012/01/requestfactory-w
     def issueManagement = [system: 'Github', url: 'https://github.com/donbeave/grails-gwt-requestfactory/issues']
     def scm = [url: 'https://github.com/donbeave/grails-gwt-requestfactory/']
 
-    def loadAfter = ['gwt']
+    Closure doWithSpring() {
+        { ->
+            def conf = loadConfig(grailsApplication.config)
 
-    def doWithSpring = {
-        def config = loadConfig(application.config)
+            rfValidationService(GrailsServiceLayer) {
+                messageSource = ref('messageSource')
+            }
+            gwtServiceLayer(ServiceLayer, ref('rfValidationService')) { bean ->
+                bean.factoryMethod = 'create'
+            }
+            gwtExceptionHandler(DefaultExceptionHandler) {
 
-        rfValidationService(GrailsServiceLayer) {
-            messageSource = ref('messageSource')
-        }
-        gwtServiceLayer(ServiceLayer, ref('rfValidationService')) { bean ->
-            bean.factoryMethod = 'create'
-        }
-        gwtExceptionHandler(DefaultExceptionHandler) {
+            }
+            gwtRequestProcessor(SimpleRequestProcessor, ref('gwtServiceLayer')) {
+                exceptionHandler = ref('gwtExceptionHandler')
+            }
 
-        }
-        gwtRequestProcessor(SimpleRequestProcessor, ref('gwtServiceLayer')) {
-            exceptionHandler = ref('gwtExceptionHandler')
-        }
-
-        // Create the proxy generator bean.
-        if (config.generate.indent) {
-            gwtProxyGenerator(DefaultGrailsRequestFactoryProxyGenerator, true, config.generate.indent)
-        } else {
-            gwtProxyGenerator(DefaultGrailsRequestFactoryProxyGenerator)
+            // Create the proxy generator bean.
+            if (conf.generate.indent) {
+                gwtProxyGenerator(DefaultGrailsRequestFactoryProxyGenerator, true, conf.generate.indent)
+            } else {
+                gwtProxyGenerator(DefaultGrailsRequestFactoryProxyGenerator)
+            }
         }
     }
 
-    private ConfigObject loadConfig(ConfigObject config) {
+    private ConfigObject loadConfig(Config conf) {
         def classLoader = new GroovyClassLoader(getClass().classLoader)
         String environment = Environment.current.name
 
@@ -83,7 +87,7 @@ Based on tutorial by [Peter Quiel|http://qr-thoughts.de/2012/01/requestfactory-w
         )
 
         // Overwrite defaults with what Config.groovy has supplied, perhaps from external files
-        newConfig.merge(config)
+        newConfig.merge(conf)
 
         // Overwrite with contents of GwtRequestFactoryConfig
         try {
@@ -95,9 +99,9 @@ Based on tutorial by [Peter Quiel|http://qr-thoughts.de/2012/01/requestfactory-w
         }
 
         // Now merge our correctly merged DefaultGwtRequestFactoryConfig and GwtRequestFactoryConfig into the main config
-        config.merge(newConfig)
+        conf.merge(newConfig)
 
-        config.grails.plugin.gwt.requestfactory
+        conf.grails.plugin.gwt.requestfactory
     }
 
 }
