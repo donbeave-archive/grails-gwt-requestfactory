@@ -16,8 +16,8 @@
 package grails.plugin.gwt.requestfactory
 
 import com.google.web.bindery.requestfactory.shared.ServiceLocator
-import org.codehaus.groovy.grails.web.context.ServletContextHolder
-import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
+import grails.web.context.ServletContextHolder
+import org.grails.web.util.GrailsApplicationAttributes
 
 /**
  * @author <a href='mailto:donbeave@gmail.com'>Alexey Zhokhov</a>
