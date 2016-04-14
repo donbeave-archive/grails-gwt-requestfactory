@@ -16,8 +16,8 @@
 package grails.plugin.gwt.requestfactory
 
 import com.google.web.bindery.requestfactory.shared.ServiceLocator
-import grails.web.context.ServletContextHolder
-import org.grails.web.util.GrailsApplicationAttributes
+import grails.util.Holders
+import org.springframework.context.ApplicationContext
 
 /**
  * @author <a href='mailto:donbeave@gmail.com'>Alexey Zhokhov</a>
@@ -25,8 +25,8 @@ import org.grails.web.util.GrailsApplicationAttributes
 class GrailsServiceLocator implements ServiceLocator {
 
     public Object getInstance(Class clazz) {
-        def context = ServletContextHolder.servletContext.getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT)
-        return context.getBean(clazz);
+        ApplicationContext context = Holders.applicationContext
+        return context.getBean(clazz)
     }
 
 }
